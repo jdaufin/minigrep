@@ -23,7 +23,9 @@ pub const HELP: &str = "usage: $> minigrep <search pattern> <target file path>";
 
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(config.filename)?;
-
+    for line in search(&config.query, &contents) {
+        println!("{}", line);
+    }
     Ok(())
 }
 
