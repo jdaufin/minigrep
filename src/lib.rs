@@ -80,12 +80,16 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new(args: &[String]) -> Result<Config, String> {
-        if args.len() < 3 {
-            return Err(format!("not enough arguments\n{}", HELP));
-        }
-        let query = args[1].clone();
-        let filename = args[2].clone();
+    pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
+        args.next();
+        let query = match args.next() {
+            Some(val) => val,
+            None => return Err("Did not get a query string"),
+        };
+        let filename = match args.next() {
+            Some(val) => val,
+            None => return Err("Did not get a filename"),
+        };
         let case_sensitive = env::var("CASE_INSENSITIVE").is_err(); // returns false if 
         // env variable not set, true otherwise, whatever the stored value
             
